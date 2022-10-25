@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.NavMenu {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: darkgray; 
+  min-height: 3em; 
+}
