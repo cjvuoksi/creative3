@@ -7,9 +7,11 @@ function Products() {
         constructor(props) {
             super(props);
             this.state = {
+                loaded: false,
                 next: null,
                 prev: null,
                 count: 0,
+                filter: [],
                 content: [
                         {
                           "id": 37106,
@@ -56,6 +58,8 @@ function Products() {
             this.getBooks = this.getBooks.bind(this);
             this.nextPage = this.nextPage.bind(this);
             this.prevPage = this.prevPage.bind(this); 
+            this.filter = this.filter.bind(this); 
+            this.update = this.update.bind(this); 
             this.getBooks(); 
         }
         //Accesses the gutendex api and returns an array of book objects
@@ -74,6 +78,8 @@ function Products() {
                     this.setState({count: json.count}); 
                     this.setState({next: json["next"]}); 
                     this.setState({prev: json.prev}); 
+                    this.setState({loaded: true}); 
+                    
                 })
                 .catch((error) => {
                     alert(error); 
@@ -98,6 +104,16 @@ function Products() {
             }
         }
         
+        //Filters results
+        filter() {
+             
+        }
+        
+    
+        update(event) {
+            this.state.filter = event.target.value;
+            this.getBooks("https://gutendex.com/books?", this.state.filter);
+        }
         
         render() {
             var productList = this.state.content.map((bookObj, i) => 
@@ -105,12 +121,23 @@ function Products() {
                     <li>{bookObj.title}</li>  
                     <li>{bookObj.authors.length > 0 ? bookObj.authors[0].name : ""}</li>
                     <li>{bookObj.id}</li>
+                    <li>{bookObj.subjects.join(", ")}</li>
                 </ul>
             ); 
+            
+
         
             return (
-                <div>
+                <div className={this.state.loaded ? "" : "loading"}>
                     <button onClick={this.getBooks}>Get Books</button>
+                    <form onSubmit={this.filter}>
+                        <select onChange={this.update}>
+                            <option value="" selected>Sort by...</option>
+                            <option value="sort">popularity</option>
+                            <option value="sort=ascending">ascending</option>
+                            <option value="sort=descending">descending</option>
+                        </select>
+                    </form>
                     <p>{"results: " + this.state.count}</p>
                     <div> {productList} </div>
                     <div> 

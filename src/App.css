@@ -44,3 +44,7 @@
   background-color: darkgray; 
   min-height: 3em; 
 }
+
+.loading {
+  visibility: hidden; 
+}
