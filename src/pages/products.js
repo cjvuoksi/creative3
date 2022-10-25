@@ -1,10 +1,5 @@
 import React from 'react';
 import {useLocation} from 'react-router-dom'
-
-
-
-
-
   
 function Products() {
     const location = useLocation(); 
@@ -15,7 +10,7 @@ function Products() {
                 content: [
                         {
                           "id": 37106,
-                          "title": "Little Women",
+                          "title": "Sample Book",
                           "authors": [
                             {
                               "name": "Alcott, Louisa May",
@@ -60,7 +55,7 @@ function Products() {
         }
         getBooks() {
             var url = "https://gutendex.com/books";
-            if (location.hasOwnProperty('state') && location.state.value !== 'undefined') {
+            if (location.hasOwnProperty('state') && location.state.value) {
                 url += "?search=" + location.state.value; 
             }
             fetch(url)
@@ -71,7 +66,6 @@ function Products() {
                     console.log(json); 
                     this.setState({content: json.results});
                     this.setState({count: json.results["count"]}); 
-                    
                 })
                 .catch((error) => {
                     alert(error); 
@@ -79,17 +73,16 @@ function Products() {
         }
         render() {
             var productList = this.state.content.map((bookObj, i) => 
+                <ul>
                 <li key={i}>{bookObj.title}</li>  
+                </ul>
             ); 
-            if (location.state.value) {
-                this.getBooks(); 
-            }          
         
             return (
                 <div>
                     <button onClick={this.getBooks}>Get Books</button>
                     <h1>{this.state.count}</h1>
-                    <ul> {productList} </ul>
+                    <div> {productList} </div>
                 </div>
             );
         }

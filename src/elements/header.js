@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 
 
 
@@ -43,10 +43,13 @@ function Header() {
           <NavLink to="/about" activeStyle>
             About
           </NavLink>
-          <NavLink 
-          to={{pathname: "/products", state: {value: ''}}} activeStyle>
+          <Link 
+            to={{
+              pathname: "/products", 
+              state: {value: ""}
+            }} activeStyle> {/*TODO fix default value*/}
             Products
-          </NavLink>
+          </Link>
           <Search /> 
         </div>
       </div>
