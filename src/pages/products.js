@@ -13,7 +13,7 @@ function Products() {
                           "title": "Sample Book",
                           "authors": [
                             {
-                              "name": "Alcott, Louisa May",
+                              "name": "Author Name",
                               "birth_year": 1832,
                               "death_year": 1888
                             }
@@ -52,6 +52,7 @@ function Products() {
                 count: 0
             }
             this.getBooks = this.getBooks.bind(this);
+            this.getBooks(); 
         }
         getBooks() {
             var url = "https://gutendex.com/books";
@@ -73,8 +74,10 @@ function Products() {
         }
         render() {
             var productList = this.state.content.map((bookObj, i) => 
-                <ul>
-                <li key={i}>{bookObj.title}</li>  
+                <ul key={i}>
+                    <li>{bookObj.title}</li>  
+                    <li>{bookObj.authors.length > 0 ? bookObj.authors[0].name : ""}</li>
+                    <li>{bookObj.id}</li>
                 </ul>
             ); 
         

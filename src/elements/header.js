@@ -43,13 +43,10 @@ function Header() {
           <NavLink to="/about" activeStyle>
             About
           </NavLink>
-          <Link 
-            to={{
-              pathname: "/products", 
-              state: {value: ""}
-            }} activeStyle> {/*TODO fix default value*/}
+          <NavLink 
+            to="/products" state={{ value: ""}} activeStyle>
             Products
-          </Link>
+          </NavLink>
           <Search /> 
         </div>
       </div>
