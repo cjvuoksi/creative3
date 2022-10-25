@@ -6,6 +6,7 @@ import Home from "./pages";
 import About from "./pages/about"; 
 import Products from "./pages/products"; 
 import Header from "./elements/header"; 
+import Footer from "./elements/footer"; 
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About />} /> 
         <Route path="/products" element={<Products />} />
       </Routes>
+      <Footer /> 
     </Router>
   );
 }
