@@ -7,6 +7,9 @@ function Products() {
         constructor(props) {
             super(props);
             this.state = {
+                next: null,
+                prev: null,
+                count: 0,
                 content: [
                         {
                           "id": 37106,
@@ -48,14 +51,16 @@ function Products() {
                           },
                           "download_count": 109619
                         }
-                    ],
-                count: 0
+                    ]
             }
             this.getBooks = this.getBooks.bind(this);
+            this.nextPage = this.nextPage.bind(this);
+            this.prevPage = this.prevPage.bind(this); 
             this.getBooks(); 
         }
-        getBooks() {
-            var url = "https://gutendex.com/books";
+        //Accesses the gutendex api and returns an array of book objects
+        getBooks(url="https://gutendex.com/books", filter="") {
+            url += filter; 
             if (location.hasOwnProperty('state') && location.state.value) {
                 url += "?search=" + location.state.value; 
             }
@@ -66,12 +71,34 @@ function Products() {
                 .then((json) => {
                     console.log(json); 
                     this.setState({content: json.results});
-                    this.setState({count: json.results["count"]}); 
+                    this.setState({count: json.count}); 
+                    this.setState({next: json["next"]}); 
+                    this.setState({prev: json.prev}); 
                 })
                 .catch((error) => {
                     alert(error); 
                 });
         }
+        //Navigates to the next page if it exists
+        nextPage() {
+            if (this.state["next"]) {
+                this.getBooks(this.state["next"])
+            }
+            else {
+                alert("No new pages")
+            }
+        }
+        //Navigates to the previous page if it exists
+        prevPage() {
+            if (this.state["prev"]) {
+                this.getBooks(this.state["prev"])
+            }
+            else {
+                alert("Page 1")
+            }
+        }
+        
+        
         render() {
             var productList = this.state.content.map((bookObj, i) => 
                 <ul key={i}>
@@ -84,8 +111,12 @@ function Products() {
             return (
                 <div>
                     <button onClick={this.getBooks}>Get Books</button>
-                    <h1>{this.state.count}</h1>
+                    <p>{"results: " + this.state.count}</p>
                     <div> {productList} </div>
+                    <div> 
+                    <button onClick={this.prevPage}>Previous</button>
+                    <button onClick={this.nextPage}>Next</button>
+                    </div>
                 </div>
             );
         }
