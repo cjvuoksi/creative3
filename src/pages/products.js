@@ -17,7 +17,7 @@ function Products() {
                 prev: null,
                 count: 0,
                 sort: "",
-                filter: ["",""],
+                filter: ["","", ""],
                 adv: false,
                 content: [
                         {
@@ -68,6 +68,8 @@ function Products() {
             this.filter = this.filter.bind(this); 
             this.upSort = this.upSort.bind(this); 
             this.upLang = this.upLang.bind(this); 
+            this.upTopic = this.upTopic.bind(this); 
+            this.handleSub = this.handleSub.bind(this); 
             this.toggleSearch = this.toggleSearch.bind(this); 
             this.getBooks(); 
         }
@@ -75,8 +77,10 @@ function Products() {
         getBooks(filter="", url="https://gutendex.com/books") {
             url += filter; 
             if (location.hasOwnProperty('state') && location.state.value) {
-                url += "?search=" + location.state.value; 
+                url += filter.length != 0 ? '&' : '?';  
+                url += "search=" + location.state.value; 
             }
+            alert(url)
             fetch(url)
                 .then((response) => {
                     return response.json();
@@ -115,8 +119,14 @@ function Products() {
         
         //Filters results
         filter() {
-            if (this.state.filter[0] == "") return "?" + this.state.filter[1]; 
-            return "?" + this.state.filter.join('&')
+            let filtered = this.state.filter.filter((item) => item != "")
+            if (filtered.length > 1) {
+            return "?" + filtered.join('&'); 
+            }
+            else {
+                if (filtered[0]) return "?" + filtered[0]
+            }
+            return "";
         }
         
         //updates sorting type
@@ -135,8 +145,24 @@ function Products() {
                     value.push(options[i].value);
                 }
             }
-            this.state.filter[1] = "languages=" + value.join(); 
+            if (value[0] != "") {
+                this.state.filter[1] = "languages=" + value.join();
+            }
+            else {
+                this.state.filter[1] = ""; 
+            }
             alert(this.filter());
+            this.getBooks(this.filter()); 
+        }
+        
+        //updates topic
+        upTopic(event) {
+            this.state.filter[2] = "topic=" + event.target.value; 
+        }
+        
+        //handles submit
+        handleSub() {
+            alert("Submit: " + this.filter()); 
             this.getBooks(this.filter()); 
         }
         
@@ -165,8 +191,8 @@ function Products() {
                 <div className="hidden" onClick={this.toggleSearch}>
                     Advanced Search
                     <div>
-                    <input placeholder="Search by topic"></input>
-                    <input placeholder="Search by language e.g. en,es"></input>
+                        <input placeholder="Search by topic" onChange={this.upTopic}></input>
+                        <button type="Submit">Apply</button>
                     </div>
                 </div>    
             );
@@ -174,7 +200,7 @@ function Products() {
         
             return (
                 <div className={this.state.loaded ? "" : "loading"}>
-                    <form onSubmit={this.filter}>
+                    <form onSubmit={this.handleSub}>
                         <select onChange={this.upSort}>
                             <option value="" selected>Sort by...</option>
                             <option value="sort">popularity</option>
@@ -201,7 +227,7 @@ function Products() {
                         </select>
                         {advSearch}
                     </form>
-                    <p>{"results: " + this.state.count}</p>
+                    <p>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</p>
                     <div> {productList} </div>
                     <div> 
                     <button onClick={this.prevPage}>Previous</button>
