@@ -1,5 +1,6 @@
 import React from 'react';
-import {useLocation} from 'react-router-dom'
+import {useLocation, Link} from 'react-router-dom'
+
   
   /*
   cd public_html/react-website
@@ -17,7 +18,7 @@ function Products() {
                 prev: null,
                 count: 0,
                 sort: "",
-                filter: ["","", ""],
+                filter: ["","",""],
                 adv: false,
                 content: [
                         {
@@ -101,7 +102,7 @@ function Products() {
         //Navigates to the next page if it exists
         nextPage() {
             if (this.state["next"]) {
-                this.getBooks(this.state["next"])
+                this.getBooks("", this.state["next"])
             }
             else {
                 alert("No new pages")
@@ -110,7 +111,7 @@ function Products() {
         //Navigates to the previous page if it exists
         prevPage() {
             if (this.state["prev"]) {
-                this.getBooks(this.state["prev"])
+                this.getBooks("", this.state["prev"])
             }
             else {
                 alert("Page 1")
@@ -168,27 +169,45 @@ function Products() {
         
         //toggles advanced search dropdown
         toggleSearch(event) {
-            if (this.state.adv) {
-                this.state.adv = false; 
+            if (event.target.classList.indexOf("hidden") == -1) {
+                event.target.classList.add("hidden")
             }
             else {
-                this.state.adv = true; 
+                event.target.classList.remove("hidden"); 
             }
-            event.target.classList.toggle("hidden"); 
         }
         
         render() {
+            
+            
             var productList = this.state.content.map((bookObj, i) => 
-                <ul key={i}>
-                    <li>{bookObj.title}</li>  
-                    <li>{bookObj.authors.length > 0 ? bookObj.authors[0].name : ""}</li>
-                    <li>{bookObj.id}</li>
-                    <li>{bookObj.subjects.join(", ")}</li>
-                </ul>
+                <div key={bookObj.id} className="book">
+                    <h2 title={bookObj.id}>{bookObj.title}</h2>  
+                    <p><i>{bookObj.id}</i></p>
+                    <div className={bookObj.authors.length == 0 ? "noDisp" : ""}>
+                        <h4>{(bookObj.authors.length > 1 ? "Authors: " : "Author: ")}</h4>
+                        <ul>
+                            {bookObj.authors.map((authorObj) => <li>{authorObj.name}</li>)}
+                        </ul>
+                    </div>
+                    <div className={bookObj.translators.length == 0 ? "noDisp" : ""}>
+                        <h4>{(bookObj.translators.length > 1 ? "Translators: " : "Translator: ")}</h4>
+                        <ul>
+                            {bookObj.translators.map((translatorObj) => <li>{translatorObj.name}</li>)}
+                        </ul>
+                    </div>
+                    <p>{bookObj.subjects.join(", ")}</p>
+                    <a 
+                        href={"https://www.gutenberg.org/ebooks/" + bookObj.id} 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >View
+                    </a>
+                </div>
             ); 
             
             var advSearch = (
-                <div className="hidden" onClick={this.toggleSearch}>
+                <div className={["hidden","search"].join(' ')} onClick={this.toggleSearch}>
                     Advanced Search
                     <div>
                         <input placeholder="Search by topic" onChange={this.upTopic}></input>
@@ -228,7 +247,7 @@ function Products() {
                         {advSearch}
                     </form>
                     <p>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</p>
-                    <div> {productList} </div>
+                    <div className="bookShelf"> {productList} </div>
                     <div> 
                     <button onClick={this.prevPage}>Previous</button>
                     <button onClick={this.nextPage}>Next</button>
