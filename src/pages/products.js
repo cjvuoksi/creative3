@@ -1,6 +1,11 @@
 import React from 'react';
 import {useLocation} from 'react-router-dom'
   
+  /*
+  cd public_html/react-website
+  npm run start
+  */
+  
 function Products() {
     const location = useLocation(); 
     class Products extends React.Component {
@@ -11,7 +16,9 @@ function Products() {
                 next: null,
                 prev: null,
                 count: 0,
-                filter: [],
+                sort: "",
+                filter: ["",""],
+                adv: false,
                 content: [
                         {
                           "id": 37106,
@@ -59,11 +66,13 @@ function Products() {
             this.nextPage = this.nextPage.bind(this);
             this.prevPage = this.prevPage.bind(this); 
             this.filter = this.filter.bind(this); 
-            this.update = this.update.bind(this); 
+            this.upSort = this.upSort.bind(this); 
+            this.upLang = this.upLang.bind(this); 
+            this.toggleSearch = this.toggleSearch.bind(this); 
             this.getBooks(); 
         }
         //Accesses the gutendex api and returns an array of book objects
-        getBooks(url="https://gutendex.com/books", filter="") {
+        getBooks(filter="", url="https://gutendex.com/books") {
             url += filter; 
             if (location.hasOwnProperty('state') && location.state.value) {
                 url += "?search=" + location.state.value; 
@@ -106,13 +115,40 @@ function Products() {
         
         //Filters results
         filter() {
-             
+            if (this.state.filter[0] == "") return "?" + this.state.filter[1]; 
+            return "?" + this.state.filter.join('&')
         }
         
-    
-        update(event) {
-            this.state.filter = event.target.value;
-            this.getBooks("https://gutendex.com/books?", this.state.filter);
+        //updates sorting type
+        upSort(event) {
+            this.state.filter[0] = event.target.value;
+            alert("updating"); 
+            this.getBooks(this.filter());
+        }
+        
+        //updates language selection
+        upLang(event) {
+            var options = event.target.options;
+            var value = [];
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].selected) {
+                    value.push(options[i].value);
+                }
+            }
+            this.state.filter[1] = "languages=" + value.join(); 
+            alert(this.filter());
+            this.getBooks(this.filter()); 
+        }
+        
+        //toggles advanced search dropdown
+        toggleSearch(event) {
+            if (this.state.adv) {
+                this.state.adv = false; 
+            }
+            else {
+                this.state.adv = true; 
+            }
+            event.target.classList.toggle("hidden"); 
         }
         
         render() {
@@ -125,18 +161,45 @@ function Products() {
                 </ul>
             ); 
             
+            var advSearch = (
+                <div className="hidden" onClick={this.toggleSearch}>
+                    Advanced Search
+                    <div>
+                    <input placeholder="Search by topic"></input>
+                    <input placeholder="Search by language e.g. en,es"></input>
+                    </div>
+                </div>    
+            );
 
         
             return (
                 <div className={this.state.loaded ? "" : "loading"}>
-                    <button onClick={this.getBooks}>Get Books</button>
                     <form onSubmit={this.filter}>
-                        <select onChange={this.update}>
+                        <select onChange={this.upSort}>
                             <option value="" selected>Sort by...</option>
                             <option value="sort">popularity</option>
                             <option value="sort=ascending">ascending</option>
                             <option value="sort=descending">descending</option>
                         </select>
+                        <label>Filter language</label>
+                        <select onChange={this.upLang} multiple id='lang'>
+                            <option value="" selected>All</option>
+                            <option value="da">Dansk</option>
+                            <option value="de">Deutsch</option>
+                            <option value="en">English</option>
+                            <option value="el">Ελληνικά</option>
+                            <option value="es">Español</option>
+                            <option value="fi">Suomi</option>
+                            <option value="fr">Français</option>
+                            <option value="hu">Magyar</option>
+                            <option value="it">Italiano</option>
+                            <option value="la">Latina</option>
+                            <option value="pt">Português</option>
+                            <option value="sv">Svenska</option>
+                            <option value="tl">Tagalog</option>
+                            <option value="zh">中文</option>
+                        </select>
+                        {advSearch}
                     </form>
                     <p>{"results: " + this.state.count}</p>
                     <div> {productList} </div>
@@ -149,7 +212,7 @@ function Products() {
         }
     }
     
-    
+    // <option value=""></option>
     
     return (
         <div>

@@ -48,3 +48,17 @@
 .loading {
   visibility: hidden; 
 }
+
+.hidden {
+  max-height: 1em; 
+  overflow-y: hidden; 
+  border: red 1px solid;
+}
+
+.link:hover {
+  cursor: pointer; 
+}
+
+.link {
+  display: block;
+}
