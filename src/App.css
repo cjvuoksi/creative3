@@ -51,12 +51,13 @@
 
 .hidden {
   max-height: 1em !important; 
+  overflow-y: hidden !important; 
 }
 
 .search {
   transition: all .5s;
-  overflow-y: hidden;
-  max-height: 3em; 
+  overflow-y: visible;
+  min-height: 7em; 
 }
 
 .search:hover {
@@ -68,29 +69,38 @@
 }
 
 /*Book class*/
+.bookCover h2 {
+  background-color: #401559;
+  color: white;
+  padding: .3em 1em; 
+}
+
 .book {
+  background-color: #feffed; 
+  padding: 0em 1em 1em;
+  color: black;
+}
+
+.bookCover {
   background-color: #feffed; 
 }
 
-.book * {
-  padding: 0em 1em;
-}
-.book:last-child {
-  padding-bottom: 1em; 
+label {
+  width: 100%;
 }
 
-.book h2 {
-  background-color: #401559;
-  color: white;
-  padding: 1em .3em;
+.searchGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  
+  align-items: flex-start;
 }
-
-
 
 @media only screen and (min-width: 600px) {
-  .book {
+  .bookCover {
     width: 400px; 
-    border-radius: 10px; 
+    border-radius: 10px;
+    transition: all 1s;
   }
   
   .bookShelf {

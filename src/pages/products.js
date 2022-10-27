@@ -2,10 +2,10 @@ import React from 'react';
 import {useLocation, Link} from 'react-router-dom'
 
   
-  /*
-  cd public_html/react-website
-  npm run start
-  */
+/*
+cd public_html/react-website
+npm run start
+*/
   
 function Products() {
     const location = useLocation(); 
@@ -14,12 +14,12 @@ function Products() {
             super(props);
             this.state = {
                 loaded: false,
+                url: 'https://gutendex.com/books',
+                urlParams: new URLSearchParams(),
                 next: null,
                 prev: null,
                 count: 0,
-                sort: "",
-                filter: ["","",""],
-                adv: false,
+                adv: true,
                 content: [
                         {
                           "id": 37106,
@@ -66,7 +66,7 @@ function Products() {
             this.getBooks = this.getBooks.bind(this);
             this.nextPage = this.nextPage.bind(this);
             this.prevPage = this.prevPage.bind(this); 
-            this.filter = this.filter.bind(this); 
+            this.getUrl = this.getUrl.bind(this); 
             this.upSort = this.upSort.bind(this); 
             this.upLang = this.upLang.bind(this); 
             this.upTopic = this.upTopic.bind(this); 
@@ -75,13 +75,8 @@ function Products() {
             this.getBooks(); 
         }
         //Accesses the gutendex api and returns an array of book objects
-        getBooks(filter="", url="https://gutendex.com/books") {
-            url += filter; 
-            if (location.hasOwnProperty('state') && location.state.value) {
-                url += filter.length != 0 ? '&' : '?';  
-                url += "search=" + location.state.value; 
-            }
-            alert(url)
+        getBooks(url="https://gutendex.com/books") {
+            alert(url); 
             fetch(url)
                 .then((response) => {
                     return response.json();
@@ -102,7 +97,7 @@ function Products() {
         //Navigates to the next page if it exists
         nextPage() {
             if (this.state["next"]) {
-                this.getBooks("", this.state["next"])
+                this.getBooks(this.state["next"])
             }
             else {
                 alert("No new pages")
@@ -111,30 +106,29 @@ function Products() {
         //Navigates to the previous page if it exists
         prevPage() {
             if (this.state["prev"]) {
-                this.getBooks("", this.state["prev"])
+                this.getBooks(this.state["prev"])
             }
             else {
                 alert("Page 1")
             }
         }
         
-        //Filters results
-        filter() {
-            let filtered = this.state.filter.filter((item) => item != "")
-            if (filtered.length > 1) {
-            return "?" + filtered.join('&'); 
+        //Gets url with search params
+        getUrl() {
+            this.state.urlParams.set("search", location.state.value); 
+            if (location.state.value == "") {
+                this.state.urlParams.delete("search"); 
             }
-            else {
-                if (filtered[0]) return "?" + filtered[0]
+            if (Array.from(this.state.urlParams).length !== 0) {
+                this.state.url = 'https://gutendex.com/books/?' ; 
             }
-            return "";
+            return (this.state.url + this.state.urlParams.toString()).replaceAll('%2C', ','); 
         }
         
         //updates sorting type
         upSort(event) {
-            this.state.filter[0] = event.target.value;
-            alert("updating"); 
-            this.getBooks(this.filter());
+            this.state.urlParams.set("sort", event.target.value);
+            this.getBooks(this.getUrl());
         }
         
         //updates language selection
@@ -147,87 +141,76 @@ function Products() {
                 }
             }
             if (value[0] != "") {
-                this.state.filter[1] = "languages=" + value.join();
+                this.state.urlParams.set("languages",value.join(","));
             }
             else {
-                this.state.filter[1] = ""; 
+                this.state.urlParams.delete("languages"); 
             }
-            alert(this.filter());
-            this.getBooks(this.filter()); 
         }
         
         //updates topic
         upTopic(event) {
-            this.state.filter[2] = "topic=" + event.target.value; 
+            if (event.target.value !== "") {
+                this.state.urlParams.set("topic", event.target.value); 
+            }
+            else {
+                this.state.urlParams.delete("topic"); 
+            }
         }
         
         //handles submit
-        handleSub() {
-            alert("Submit: " + this.filter()); 
-            this.getBooks(this.filter()); 
+        handleSub(event) {
+            event.preventDefault(); 
+            this.getBooks(this.getUrl()); 
+            this.render(); 
         }
         
         //toggles advanced search dropdown
         toggleSearch(event) {
-            if (event.target.classList.indexOf("hidden") == -1) {
-                event.target.classList.add("hidden")
+            if (this.state.adv == true) {
+                this.state.adv.setState(false); 
             }
             else {
-                event.target.classList.remove("hidden"); 
+                this.state.adv.setState(true); 
             }
+            this.render()
         }
         
         render() {
-            
-            
             var productList = this.state.content.map((bookObj, i) => 
-                <div key={bookObj.id} className="book">
-                    <h2 title={bookObj.id}>{bookObj.title}</h2>  
-                    <p><i>{bookObj.id}</i></p>
-                    <div className={bookObj.authors.length == 0 ? "noDisp" : ""}>
-                        <h4>{(bookObj.authors.length > 1 ? "Authors: " : "Author: ")}</h4>
-                        <ul>
-                            {bookObj.authors.map((authorObj) => <li>{authorObj.name}</li>)}
-                        </ul>
+                <div key={bookObj.id} className="bookCover">
+                    <h2 title={bookObj.id}>{bookObj.title}</h2>
+                    <div className="book">
+                        <div className={bookObj.authors.length == 0 ? "noDisp" : ""}>
+                            <h4>{(bookObj.authors.length > 1 ? "Authors: " : "Author: ")}</h4>
+                            <ul>
+                                {bookObj.authors.map((authorObj) => <li>{authorObj.name}</li>)}
+                            </ul>
+                        </div>
+                        <div className={bookObj.translators.length == 0 ? "noDisp" : ""}>
+                            <h4>{(bookObj.translators.length > 1 ? "Translators: " : "Translator: ")}</h4>
+                            <ul>
+                                {bookObj.translators.map((translatorObj) => <li>{translatorObj.name}</li>)}
+                            </ul>
+                        </div>
+                        <p>{bookObj.subjects.join(", ")}</p>
+                        <a 
+                            href={"https://www.gutenberg.org/ebooks/" + bookObj.id} 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >View
+                        </a>
                     </div>
-                    <div className={bookObj.translators.length == 0 ? "noDisp" : ""}>
-                        <h4>{(bookObj.translators.length > 1 ? "Translators: " : "Translator: ")}</h4>
-                        <ul>
-                            {bookObj.translators.map((translatorObj) => <li>{translatorObj.name}</li>)}
-                        </ul>
-                    </div>
-                    <p>{bookObj.subjects.join(", ")}</p>
-                    <a 
-                        href={"https://www.gutenberg.org/ebooks/" + bookObj.id} 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >View
-                    </a>
                 </div>
             ); 
             
             var advSearch = (
-                <div className={["hidden","search"].join(' ')} onClick={this.toggleSearch}>
+                <div className={[(this.state.adv ? "": "hidden"),"search"].join(' ')} onClick={this.toggleSearch}>
                     Advanced Search
-                    <div>
-                        <input placeholder="Search by topic" onChange={this.upTopic}></input>
-                        <button type="Submit">Apply</button>
-                    </div>
-                </div>    
-            );
-
-        
-            return (
-                <div className={this.state.loaded ? "" : "loading"}>
-                    <form onSubmit={this.handleSub}>
-                        <select onChange={this.upSort}>
-                            <option value="" selected>Sort by...</option>
-                            <option value="sort">popularity</option>
-                            <option value="sort=ascending">ascending</option>
-                            <option value="sort=descending">descending</option>
-                        </select>
-                        <label>Filter language</label>
-                        <select onChange={this.upLang} multiple id='lang'>
+                    <div className="searchGrid">
+                        <div>
+                        <label>By language <br></br></label>
+                        <select onChange={this.upLang} size="4" multiple>
                             <option value="" selected>All</option>
                             <option value="da">Dansk</option>
                             <option value="de">Deutsch</option>
@@ -244,6 +227,28 @@ function Products() {
                             <option value="tl">Tagalog</option>
                             <option value="zh">中文</option>
                         </select>
+                        </div>
+                        <div>
+                        <input placeholder="Search by topic" onChange={this.upTopic}></input>
+                        </div>
+                        <div>
+                        <button type="Submit">Apply</button>
+                        </div>
+                    </div>
+                </div>    
+            );
+
+        
+            return (
+                <div className={this.state.loaded ? "" : "loading"}>
+                    <form onSubmit={this.handleSub}>
+                        <select onChange={this.upSort}>
+                            <option value="" selected>Sort by...</option>
+                            <option value="">popularity</option>
+                            <option value="ascending">ascending</option>
+                            <option value="descending">descending</option>
+                        </select>
+                        
                         {advSearch}
                     </form>
                     <p>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</p>
