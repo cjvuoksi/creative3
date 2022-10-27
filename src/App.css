@@ -102,6 +102,9 @@ h2 {
   font-family: "Garamond", serif; 
 }
 
+p {
+  padding-left: 1em; 
+}
 
 /*Links*/
 a:link {
@@ -128,6 +131,7 @@ select {
 h1 {
   background-color: #401559;
   color: white;
+  text-align: center; 
 }
 
 option:checked {

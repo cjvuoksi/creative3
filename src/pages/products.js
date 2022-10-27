@@ -241,7 +241,7 @@ function Products() {
                         
                         {advSearch}
                     </form>
-                    <p>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</p>
+                    <p><i>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</i></p>
                     <div className="bookShelf"> {productList} </div>
                     <div> 
                     <button onClick={this.prevPage}>Previous</button>
