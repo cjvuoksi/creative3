@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useLocation, Link} from 'react-router-dom'
 
   
@@ -8,7 +8,7 @@ npm run start
 */
   
 function Products() {
-    const location = useLocation(); 
+    const location = useLocation();
     class Products extends React.Component {
         constructor(props) {
             super(props);
@@ -19,7 +19,6 @@ function Products() {
                 next: null,
                 prev: null,
                 count: 0,
-                adv: true,
                 content: [
                         {
                           "id": 37106,
@@ -71,12 +70,11 @@ function Products() {
             this.upLang = this.upLang.bind(this); 
             this.upTopic = this.upTopic.bind(this); 
             this.handleSub = this.handleSub.bind(this); 
-            this.toggleSearch = this.toggleSearch.bind(this); 
+            this.toggleMenu = this.toggleMenu.bind(this); 
             this.getBooks(); 
         }
         //Accesses the gutendex api and returns an array of book objects
         getBooks(url="https://gutendex.com/books") {
-            alert(url); 
             fetch(url)
                 .then((response) => {
                     return response.json();
@@ -165,16 +163,11 @@ function Products() {
             this.render(); 
         }
         
-        //toggles advanced search dropdown
-        toggleSearch(event) {
-            if (this.state.adv == true) {
-                this.state.adv.setState(false); 
-            }
-            else {
-                this.state.adv.setState(true); 
-            }
-            this.render()
+        //Toggles advanced search
+        toggleMenu(event) {
+            if (event.target.classList.contains("search")) event.target.classList.toggle("hidden"); 
         }
+        
         
         render() {
             var productList = this.state.content.map((bookObj, i) => 
@@ -182,16 +175,15 @@ function Products() {
                     <h2 title={bookObj.id}>{bookObj.title}</h2>
                     <div className="book">
                         <div className={bookObj.authors.length == 0 ? "noDisp" : ""}>
-                            <h4>{(bookObj.authors.length > 1 ? "Authors: " : "Author: ")}</h4>
-                            <ul>
-                                {bookObj.authors.map((authorObj) => <li>{authorObj.name}</li>)}
-                            </ul>
+                            <h4><i>{"By "} 
+                                {bookObj.authors.map((authorObj) => 
+                                    authorObj.name.split(',').reverse().join(" ")).join(", ")}</i>
+                            </h4>
                         </div>
                         <div className={bookObj.translators.length == 0 ? "noDisp" : ""}>
-                            <h4>{(bookObj.translators.length > 1 ? "Translators: " : "Translator: ")}</h4>
-                            <ul>
-                                {bookObj.translators.map((translatorObj) => <li>{translatorObj.name}</li>)}
-                            </ul>
+                            <h4><i>{"Translated by "}
+                                {bookObj.translators.map((translatorObj) => translatorObj.name.split(',').reverse().join(' ')).join(", ")}</i>
+                            </h4>
                         </div>
                         <p>{bookObj.subjects.join(", ")}</p>
                         <a 
@@ -204,13 +196,16 @@ function Products() {
                 </div>
             ); 
             
-            var advSearch = (
-                <div className={[(this.state.adv ? "": "hidden"),"search"].join(' ')} onClick={this.toggleSearch}>
+            const advSearch = (
+                <div className={["hidden","search"].join(' ')} onClick={this.toggleMenu}tabindex={1}>
                     Advanced Search
                     <div className="searchGrid">
                         <div>
-                        <label>By language <br></br></label>
-                        <select onChange={this.upLang} size="4" multiple>
+                        <input placeholder="Search by topic" onChange={this.upTopic}></input>
+                        </div>
+                        <div>
+                        <label>By language  <br></br></label>
+                        <select onChange={this.upLang} size="4" multiple tabindex={-1}>
                             <option value="" selected>All</option>
                             <option value="da">Dansk</option>
                             <option value="de">Deutsch</option>
@@ -228,12 +223,7 @@ function Products() {
                             <option value="zh">中文</option>
                         </select>
                         </div>
-                        <div>
-                        <input placeholder="Search by topic" onChange={this.upTopic}></input>
-                        </div>
-                        <div>
-                        <button type="Submit">Apply</button>
-                        </div>
+                        <button type="Submit" tabindex={-1}>Apply</button>
                     </div>
                 </div>    
             );
@@ -242,7 +232,7 @@ function Products() {
             return (
                 <div className={this.state.loaded ? "" : "loading"}>
                     <form onSubmit={this.handleSub}>
-                        <select onChange={this.upSort}>
+                        <select onChange={this.upSort} className="sort">
                             <option value="" selected>Sort by...</option>
                             <option value="">popularity</option>
                             <option value="ascending">ascending</option>
@@ -266,7 +256,7 @@ function Products() {
     
     return (
         <div>
-            <h1>Products</h1>
+            <h1>Books</h1>
             <Products /> 
         </div>
     );

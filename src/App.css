@@ -49,24 +49,37 @@
   visibility: hidden; 
 }
 
-.hidden {
-  max-height: 1em !important; 
-  overflow-y: hidden !important; 
-}
-
 .search {
-  transition: all .5s;
-  overflow-y: visible;
-  min-height: 7em; 
+  overflow-y: hidden;
+  max-height: 13em; 
+  transition: all 1s; 
+  padding-left: 1em; 
 }
 
 .search:hover {
   cursor: pointer;
 }
 
+.hidden {
+  max-height: 1.1em; 
+}
+
+.hidden:hover {
+  text-decoration: underline; 
+}
+
+.searchGrid {
+  height: max-content;
+  display: flex; 
+  flex-direction: column;
+  padding-left: 1em; 
+  gap: .4em; 
+}
+
 .noDisp {
   display: none; 
 }
+
 
 /*Book class*/
 .bookCover h2 {
@@ -85,21 +98,112 @@
   background-color: #feffed; 
 }
 
-label {
-  width: 100%;
+h2 {
+  font-family: "Garamond", serif; 
 }
 
-.searchGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; 
-  
-  align-items: flex-start;
+
+/*Links*/
+a:link {
+  color: #401559;
+}
+a:hover {
+  color: gray;
+}
+
+/*Select and Input*/
+select {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 .4em;
+  margin: 0;
+  width: 10em;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
+
+h1 {
+  background-color: #401559;
+  color: white;
+}
+
+option:checked {
+  background-color: #705083;
+  color: white;
+}
+
+.sort {
+  background-color: #705083;
+  color: white;
+  border-radius: 1em;
+  padding: .2em; 
+  padding-left: .4em; 
+  margin-left: .6em; 
+  width: 18em;
+}
+
+.sort:hover {
+  background-color: #B7A7C1;
+  color: black;
+}
+
+
+
+::selection {
+  background-color: #B7A7C1;
+}
+
+
+
+input {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: .2em 1em .2em .4em;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  border-radius: 1em;
+}
+
+input:hover {
+  background-color: lightgray; 
+}
+
+input:focus {
+  background-color: white; 
+  border: none;
+}
+
+button {
+  appearance: none;
+  background-color: #401559;
+  border: none;
+  padding: .2em;
+  margin: 0;
+  width: 10em; 
+  color: white;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  border-radius: 1em;
+}
+
+button:hover {
+  background-color: #705083;
 }
 
 @media only screen and (min-width: 600px) {
   .bookCover {
     width: 400px; 
     border-radius: 10px;
+    overflow: hidden; 
     transition: all 1s;
   }
   
