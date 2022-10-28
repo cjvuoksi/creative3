@@ -20,7 +20,7 @@ function Header() {
       this.state.form = event.target.value; 
     }
     handleSubmit(event) {
-      navigate('/products', {state: {value: this.state.form}});
+      navigate('/react-website/build/products', {state: {value: this.state.form}});
     }
     
     render() {
@@ -37,14 +37,14 @@ function Header() {
   return (
       <div className="NavBar">
         <div className="NavMenu">
-          <NavLink to="/" activeStyle>
+          <NavLink to="/react-website/build/" activeStyle>
             Home
           </NavLink>
-          <NavLink to="/about" activeStyle>
+          <NavLink to="/react-website/build/about" activeStyle>
             About
           </NavLink>
           <NavLink 
-            to="/products" state={{ value: ""}} activeStyle>
+            to="/react-website/build/products" state={{ value: ""}} activeStyle>
             Books
           </NavLink>
           <Search /> 

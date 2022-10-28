@@ -14,9 +14,9 @@ function App() {
     <Router>
     <Header />
       <Routes>
-        <Route exact path='/' exact element={<Home />} /> 
-        <Route path="/about" element={<About />} /> 
-        <Route path="/products" element={<Products />} />
+        <Route path='/react-website/build/' element={<Home />} /> 
+        <Route path="/react-website/build/about" element={<About />} /> 
+        <Route path="/react-website/build/products" element={<Products />} />
       </Routes>
       <Footer /> 
     </Router>
