@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Freehand&family=Montserrat:wght@200&display=swap');
 .App {
   text-align: center;
 }
@@ -43,6 +45,23 @@
   align-items: center;
   background-color: darkgray; 
   min-height: 3em; 
+  margin: 0;
+}
+
+.NavMenu a {
+  background-color: #401559;
+  padding-top: 1em;  
+  padding-bottom: 1em; 
+  margin-bottom: 0; 
+  flex-grow: .3;
+  text-align: center; 
+  color: lightgray;
+  font-family: 'Freehand', cursive;
+}
+
+.NavMenu a:hover {
+  background-color: gray; 
+  color: #401559;
 }
 
 .loading {
@@ -63,6 +82,7 @@
 .hidden {
   max-height: 1.1em; 
 }
+
 
 .hidden:hover {
   text-decoration: underline; 
@@ -99,7 +119,7 @@
 }
 
 h2 {
-  font-family: "Garamond", serif; 
+  font-family: 'Montserrat', sans-serif;
 }
 
 p {
@@ -132,6 +152,7 @@ h1 {
   background-color: #401559;
   color: white;
   text-align: center; 
+  font-family: 'Freehand', cursive;
 }
 
 option:checked {
@@ -160,7 +181,19 @@ option:checked {
   background-color: #B7A7C1;
 }
 
+.home {
+  background: url("https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80");
+  background-size: cover; 
+  height: 100vh;
+  text-align: center;
+  padding-top: 0; 
+}
 
+.home input {
+  background-color: rgba(220,220,220,.8); 
+  margin-top: 80vh; 
+  text-align: center; 
+}
 
 input {
   appearance: none;
@@ -201,6 +234,15 @@ button {
 
 button:hover {
   background-color: #705083;
+}
+
+.buttonDiv {
+  padding: 1em; 
+  text-align: center; 
+}
+
+.buttonDiv button {
+  margin: 1em; 
 }
 
 @media only screen and (min-width: 600px) {

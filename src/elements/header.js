@@ -26,12 +26,12 @@ function Header() {
     render() {
       return (
         <form onKeyUp={this.handleChange} onSubmit={this.handleSubmit}>
-          <input placeholder="Book name...">
+          <input placeholder="Book title or author...">
           </input>
         </form>
-        )
+        );
     }
-    }
+  }
   
   
   return (
@@ -45,7 +45,7 @@ function Header() {
           </NavLink>
           <NavLink 
             to="/products" state={{ value: ""}} activeStyle>
-            Products
+            Books
           </NavLink>
           <Search /> 
         </div>

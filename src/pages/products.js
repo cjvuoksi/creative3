@@ -61,7 +61,7 @@ function Products() {
                           "download_count": 109619
                         }
                     ]
-            }
+            }; 
             this.getBooks = this.getBooks.bind(this);
             this.nextPage = this.nextPage.bind(this);
             this.prevPage = this.prevPage.bind(this); 
@@ -71,7 +71,7 @@ function Products() {
             this.upTopic = this.upTopic.bind(this); 
             this.handleSub = this.handleSub.bind(this); 
             this.toggleMenu = this.toggleMenu.bind(this); 
-            this.getBooks(); 
+            this.getBooks(this.getUrl()); 
         }
         //Accesses the gutendex api and returns an array of book objects
         getBooks(url="https://gutendex.com/books") {
@@ -84,7 +84,7 @@ function Products() {
                     this.setState({content: json.results});
                     this.setState({count: json.count}); 
                     this.setState({next: json["next"]}); 
-                    this.setState({prev: json.prev}); 
+                    this.setState({prev: json["previous"]}); 
                     this.setState({loaded: true}); 
                     
                 })
@@ -95,19 +95,19 @@ function Products() {
         //Navigates to the next page if it exists
         nextPage() {
             if (this.state["next"]) {
-                this.getBooks(this.state["next"])
+                this.getBooks(this.state["next"]); 
             }
             else {
-                alert("No new pages")
+                alert("No new pages"); 
             }
         }
         //Navigates to the previous page if it exists
         prevPage() {
             if (this.state["prev"]) {
-                this.getBooks(this.state["prev"])
+                this.getBooks(this.state["prev"]);
             }
             else {
-                alert("Page 1")
+                alert("First page");
             }
         }
         
@@ -235,15 +235,15 @@ function Products() {
                         <select onChange={this.upSort} className="sort">
                             <option value="" selected>Sort by...</option>
                             <option value="">popularity</option>
-                            <option value="ascending">ascending</option>
-                            <option value="descending">descending</option>
+                            <option value="ascending">date added ascending</option>
+                            <option value="descending">date added descending</option>
                         </select>
                         
                         {advSearch}
                     </form>
-                    <p><i>{this.state.count + " results found" + (location.state.value ? " for query " + location.state.value : "")}</i></p>
+                    <p><i>{this.state.count + (this.state.count == 1 ? " result found" : " results found") + (location.state.value ? " for query " + "\'" + location.state.value + "\'" : "")}</i></p>
                     <div className="bookShelf"> {productList} </div>
-                    <div> 
+                    <div className="buttonDiv"> 
                     <button onClick={this.prevPage}>Previous</button>
                     <button onClick={this.nextPage}>Next</button>
                     </div>
