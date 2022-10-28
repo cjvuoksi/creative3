@@ -46,22 +46,30 @@
   background-color: darkgray; 
   min-height: 3em; 
   margin: 0;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .NavMenu a {
   background-color: #401559;
-  padding-top: 1em;  
-  padding-bottom: 1em; 
+  padding-top: .75em;  
+  padding-bottom: .75em; 
   margin-bottom: 0; 
-  flex-grow: .3;
+  width: 33%;
   text-align: center; 
   color: lightgray;
   font-family: 'Freehand', cursive;
+  font-size: 1.5em; 
 }
 
 .NavMenu a:hover {
   background-color: gray; 
   color: #401559;
+}
+
+.NavMenu input {
+  margin: .2em 0em; 
+  flex-grow: 1;
 }
 
 .loading {
@@ -167,7 +175,7 @@ option:checked {
   padding: .2em; 
   padding-left: .4em; 
   margin-left: .6em; 
-  width: 18em;
+  max-width: 100%; 
 }
 
 .sort:hover {
@@ -184,14 +192,14 @@ option:checked {
 .home {
   background: url("https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80");
   background-size: cover; 
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
   padding-top: 0; 
 }
 
 .home input {
   background-color: rgba(220,220,220,.8); 
-  margin-top: 70vh; 
+  margin-top: 50vh; 
   text-align: center; 
 }
 
@@ -203,7 +211,7 @@ option:checked {
 }
 
 .home h1 {
-  margin-top: 2px; 
+  margin-top: 1em; 
   width: 100%;
 }
 
@@ -278,5 +286,16 @@ button:hover {
     gap: 1em; 
     grid-template-columns: repeat(auto-fill, 400px); 
     justify-content: center;
+  }
+  
+  .NavMenu {
+    flex-wrap: nowrap;
+  }
+  
+  .NavMenu a {
+    max-width: 20%;
+    font-size: 2em; 
+    padding-bottom: .5em;
+    padding-top: .5em; 
   }
 }
