@@ -57,7 +57,7 @@
   margin-bottom: 0; 
   width: 33%;
   text-align: center; 
-  color: lightgray;
+  color: lightgray !important;
   font-family: 'Freehand', cursive;
   font-size: 1.5em; 
 }
