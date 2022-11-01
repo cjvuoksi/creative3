@@ -11,12 +11,12 @@ import Footer from "./elements/footer";
 
 function App() {
   return (
-    <Router>
+    <Router basename="creative3/build/">
     <Header />
       <Routes>
-        <Route path='/react-website/build/' element={<Home />} /> 
-        <Route path="/react-website/build/about" element={<About />} /> 
-        <Route path="/react-website/build/products" element={<Products />} />
+        <Route path='/' element={<Home />} /> 
+        <Route path="/about" element={<About />} /> 
+        <Route path="/products" element={<Products />} />
       </Routes>
       <Footer /> 
     </Router>

@@ -18,7 +18,7 @@ function Home() {
       this.state.form = event.target.value; 
     }
     handleSubmit(event) {
-      navigate('/react-website/build/products', {state: {value: this.state.form}});
+      navigate('/products', {state: {value: this.state.form}});
     }
     
     render() {
